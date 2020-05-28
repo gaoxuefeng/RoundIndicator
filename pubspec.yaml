@@ -1,8 +1,8 @@
 name: round_indicator
 description: round_indicator for TabBar
-version: 0.0.1
-#author: GaoXuefeng
-homepage: https://github.com/gaoxuefeng
+version: 0.0.2
+author: GaoXuefeng
+homepage: https://github.com/gaoxuefeng/RoundIndicator
 environment:
   sdk: ">=2.1.0 <3.0.0"
 

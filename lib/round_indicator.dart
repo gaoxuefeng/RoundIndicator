@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
  * Created by Gao Xuefeng
  * on 2020/5/27
  */
-class RoundUnderLineTabIndicator extends Decoration {
+class RoundTabIndicator extends Decoration {
   final BorderSide borderSide;
   final EdgeInsetsGeometry insets;
   final Gradient gradient;
@@ -15,7 +15,7 @@ class RoundUnderLineTabIndicator extends Decoration {
   //默认是width/2
   double radius = 0;
 
-  RoundUnderLineTabIndicator(
+  RoundTabIndicator(
       {this.borderSide = const BorderSide(width: 2, color: Colors.white),
       this.insets = EdgeInsets.zero,
       this.gradient,
@@ -35,8 +35,8 @@ class RoundUnderLineTabIndicator extends Decoration {
 
   @override
   Decoration lerpFrom(Decoration a, double t) {
-    if (a is RoundUnderLineTabIndicator) {
-      return RoundUnderLineTabIndicator(
+    if (a is RoundTabIndicator) {
+      return RoundTabIndicator(
         borderSide: BorderSide.lerp(a.borderSide, borderSide, t),
         insets: EdgeInsetsGeometry.lerp(a.insets, insets, t),
       );
@@ -46,7 +46,7 @@ class RoundUnderLineTabIndicator extends Decoration {
 }
 
 class _RoundUnderLineTabIndicatorPainter extends BoxPainter {
-  final RoundUnderLineTabIndicator decoration;
+  final RoundTabIndicator decoration;
 
   BorderSide get borderSide => decoration.borderSide;
 
