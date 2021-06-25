@@ -2,14 +2,12 @@ library round_indicator;
 
 import 'package:flutter/material.dart';
 
-/**
- * Created by Gao Xuefeng
- * on 2020/5/27
- */
+/// Created by Gao Xuefeng
+/// on 2020/5/27
 class RoundTabIndicator extends Decoration {
   final BorderSide borderSide;
   final EdgeInsetsGeometry insets;
-  final Gradient gradient;
+  final Gradient? gradient;
   bool isRound;
 
   //默认是width/2
@@ -29,18 +27,24 @@ class RoundTabIndicator extends Decoration {
   }
 
   @override
-  BoxPainter createBoxPainter([onChanged]) {
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) {
     return _RoundUnderLineTabIndicatorPainter(this, onChanged);
   }
 
+  // @override
+  // BoxPainter createBoxPainter([onChanged]) {
+  //   return _RoundUnderLineTabIndicatorPainter(this, onChanged);
+  // }
+
   @override
-  Decoration lerpFrom(Decoration a, double t) {
+  Decoration? lerpFrom(Decoration? a, double t) {
     if (a is RoundTabIndicator) {
       return RoundTabIndicator(
         borderSide: BorderSide.lerp(a.borderSide, borderSide, t),
-        insets: EdgeInsetsGeometry.lerp(a.insets, insets, t),
+        insets: EdgeInsetsGeometry.lerp(a.insets, insets, t)!,
       );
     }
+
     return super.lerpFrom(a, t);
   }
 }
@@ -52,7 +56,7 @@ class _RoundUnderLineTabIndicatorPainter extends BoxPainter {
 
   EdgeInsetsGeometry get insets => decoration.insets;
 
-  _RoundUnderLineTabIndicatorPainter(this.decoration, VoidCallback onChanged)
+  _RoundUnderLineTabIndicatorPainter(this.decoration, VoidCallback? onChanged)
       : assert(decoration != null),
         super(onChanged);
 
@@ -60,10 +64,9 @@ class _RoundUnderLineTabIndicatorPainter extends BoxPainter {
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
     assert(configuration != null);
     assert(configuration.size != null);
-    final Rect rect = offset & configuration.size;
-    final TextDirection textDirection = configuration.textDirection;
-    final Rect indicator =
-        _indicatorRectFor(rect, textDirection).deflate(borderSide.width / 2.0);
+    final Rect rect = offset & configuration.size!;
+    final TextDirection textDirection = configuration.textDirection!;
+    final Rect indicator = _indicatorRectFor(rect, textDirection).deflate(borderSide.width / 2.0);
     final Paint paint = borderSide.toPaint()..strokeCap = StrokeCap.square;
     if (decoration.gradient == null) {
       if (decoration.isRound) {
@@ -74,23 +77,18 @@ class _RoundUnderLineTabIndicatorPainter extends BoxPainter {
       paint..strokeWidth = 0;
       paint.style = PaintingStyle.fill;
       if (!decoration.isRound) {
-        Rect underLineRect = Rect.fromLTRB(
-            indicator.bottomLeft.dx,
-            indicator.bottom - borderSide.width,
-            indicator.bottomRight.dx,
-            indicator.bottom);
-        canvas.drawRect(underLineRect,
-            paint..shader = decoration.gradient.createShader(underLineRect));
+        Rect underLineRect = Rect.fromLTRB(indicator.bottomLeft.dx,
+            indicator.bottom - borderSide.width, indicator.bottomRight.dx, indicator.bottom);
+        canvas.drawRect(
+            underLineRect, paint..shader = decoration.gradient?.createShader(underLineRect));
       } else {
         Rect underLineRect = Rect.fromLTRB(
             indicator.bottomLeft.dx + borderSide.width / 2,
             indicator.bottom - borderSide.width,
             indicator.bottomRight.dx - borderSide.width / 2,
             indicator.bottom);
-        RRect rRect = RRect.fromRectAndRadius(
-            underLineRect, Radius.circular(decoration.radius));
-        canvas.drawRRect(rRect,
-            paint..shader = decoration.gradient.createShader(underLineRect));
+        RRect rRect = RRect.fromRectAndRadius(underLineRect, Radius.circular(decoration.radius));
+        canvas.drawRRect(rRect, paint..shader = decoration.gradient?.createShader(underLineRect));
       }
     }
   }
